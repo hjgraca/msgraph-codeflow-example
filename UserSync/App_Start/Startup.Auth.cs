@@ -15,8 +15,8 @@ namespace UserSync
 {
     public partial class Startup
     {
-        public static string clientId = "2a5c6c1d-b11b-4c53-9369-7b29cef9882d";
-        public static string clientSecret = "LCo7x39nTi7bXberZkvAD02";
+        public static string clientId = "[Enter your client ID, as obtained from the app registration portal]";
+        public static string clientSecret = "[Enter your client secret, as obtained from the app registration portal]";
         private static string authority = "https://login.microsoftonline.com/common/v2.0";
         public static string redirectUri = "https://localhost:44316/";
 
