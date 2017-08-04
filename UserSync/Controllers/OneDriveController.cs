@@ -63,7 +63,7 @@ namespace UserSync.Controllers
             // Get response
             string json = await response.Content.ReadAsStringAsync();
             var files = JsonConvert.DeserializeObject<MsGraphDriveListResponse>(json);
-            drivesByUser["[O id ou email do utilizador Admin]"] = files.value;
+            drivesByUser["henrique@henriqueonedrive.onmicrosoft.com"] = files.value;
 
             return files.value.Select(x => String.Concat(x.name, ";")).ToString();
         }

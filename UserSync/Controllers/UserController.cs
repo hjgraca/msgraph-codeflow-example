@@ -29,11 +29,11 @@ namespace UserSync.Controllers
             //}
 
             // Show the list of users that have been sync'd to the database
-            string tenantId = "[O tenantID]";
+            string tenantId = "adcb46ee-de3a-485e-b3c9-7c83a2d4cbcf";
             ViewBag.TenantId = tenantId;
             ViewBag.Users = SyncController.GetUsersForTenant(tenantId);
 
-            string userId = "[O id ou email do utilizador Admin]";
+            string userId = "henrique@henriqueonedrive.onmicrosoft.com";
             ViewBag.UserId = userId;
             ViewBag.Drive = OneDriveController.GetDriveForUser(userId);
 
