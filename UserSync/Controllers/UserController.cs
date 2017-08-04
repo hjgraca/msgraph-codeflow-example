@@ -23,15 +23,19 @@ namespace UserSync.Controllers
         public ActionResult Index()
         {
             // Make sure the user is signed in
-            if (!Request.IsAuthenticated)
-            {
-                return new RedirectResult("/Account/Index");
-            }
+            //if (!Request.IsAuthenticated)
+            //{
+            //    return new RedirectResult("/Account/Index");
+            //}
 
             // Show the list of users that have been sync'd to the database
-            string tenantId = ClaimsPrincipal.Current.FindFirst(tenantIdClaimType).Value;
+            string tenantId = "adcb46ee-de3a-485e-b3c9-7c83a2d4cbcf";
             ViewBag.TenantId = tenantId;
             ViewBag.Users = SyncController.GetUsersForTenant(tenantId);
+
+            string userId = "henrique@henriqueonedrive.onmicrosoft.com";
+            ViewBag.UserId = userId;
+            ViewBag.Drive = OneDriveController.GetDriveForUser(userId);
 
             return View();
         }

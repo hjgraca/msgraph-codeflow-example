@@ -1,31 +1,29 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using UserSync.Models;
+using System.Linq;
 
 namespace UserSync.Controllers
 {
-    public class SyncController : ApiController
+    public class OneDriveController : ApiController
     {
         // Not a good idea.  We're using an in-memory data store in this sample instead
         // of a database purely for purposes of simplifying the sample code.
-        private static ConcurrentDictionary<string, List<MsGraphUser>> usersByTenant = new ConcurrentDictionary<string, List<MsGraphUser>>();
+        private static ConcurrentDictionary<string, List<MsGraphDrive>> drivesByUser = new ConcurrentDictionary<string, List<MsGraphDrive>>();
 
         private const string authorityFormat = "https://login.microsoftonline.com/{0}/v2.0";
         private const string msGraphScope = "https://graph.microsoft.com/.default";
-        private const string msGraphQuery = "https://graph.microsoft.com/v1.0/users";
+        private const string msGraphQuery = "https://graph.microsoft.com/v1.0/users/henrique@henriqueonedrive.onmicrosoft.com/drive/root/children";
 
         //[Authorize]
-        public async Task Get(string tenantId)
+        public async Task<string> Get(string tenantId)
         {
             // Get a token for the Microsoft Graph. If this line throws an exception for
             // any reason, we'll just let the exception be returned as a 500 response
@@ -62,18 +60,19 @@ namespace UserSync.Controllers
                 throw new HttpResponseException(response.StatusCode);
             }
 
-            // Record users in the data store (note that this only records the first page of users)
+            // Get response
             string json = await response.Content.ReadAsStringAsync();
-            MsGraphUserListResponse users = JsonConvert.DeserializeObject<MsGraphUserListResponse>(json);
-            usersByTenant[tenantId] = users.value;
-            return;
+            var files = JsonConvert.DeserializeObject<MsGraphDriveListResponse>(json);
+            drivesByUser["henrique@henriqueonedrive.onmicrosoft.com"] = files.value;
+
+            return files.value.Select(x => String.Concat(x.name, ";")).ToString();
         }
 
-        public static List<MsGraphUser> GetUsersForTenant(string tenantId)
+        public static List<MsGraphDrive> GetDriveForUser(string tenantId)
         {
-            List<MsGraphUser> users = null;
-            usersByTenant.TryGetValue(tenantId, out users);
-            return users ?? new List<MsGraphUser>();
+            List<MsGraphDrive> users = null;
+            drivesByUser.TryGetValue(tenantId, out users);
+            return users ?? new List<MsGraphDrive>();
         }
     }
 }
